@@ -58,6 +58,7 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <None Include="lib1.less" />
     <None Include="test1.less" />
   </ItemGroup>
   <ItemGroup>
