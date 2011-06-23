@@ -1,0 +1,19 @@
+﻿<?xml version="1.0"?>
+<configuration>
+
+  <system.web>
+    <httpHandlers>
+      <add path="*.coffee" type="DotSmart.CoffeeScriptHandler, LessCoffee" verb="*" validate="false"/>
+      <add path="*.less" type="DotSmart.LessCssHandler, LessCoffee" verb="*" validate="false"/>
+    </httpHandlers>
+  </system.web>
+
+  <system.webServer>
+    <validation validateIntegratedModeConfiguration="false"/>
+    <handlers>
+      <add path="*.coffee" type="DotSmart.CoffeeScriptHandler, LessCoffee" verb="*" name="DotSmart.CoffeeScriptHandler"/>
+      <add path="*.less" type="DotSmart.LessCssHandler, LessCoffee" verb="*" name="DotSmart.LessCssHandler"/>
+    </handlers>
+  </system.webServer>
+
+</configuration>
