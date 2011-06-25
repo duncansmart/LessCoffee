@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>LessCoffee</id>
-    <version>1.0.0.0</version>
+    <version>1.0.2</version>
     <authors>Duncan Smart</authors>
     <owners>Duncan Smart</owners>
     <projectUrl>https://github.com/duncansmart/LessCoffee</projectUrl>
@@ -12,6 +12,6 @@
   </metadata>
   <files>
     <file src="Content\web.config.transform" target="Content\web.config.transform" />
-    <file src="..\src\Handlers\bin\Release\LessCoffee.dll" target="lib\LessCoffee.dll" />
+    <file src="..\src\Handlers\bin\LessCoffee.dll" target="lib\LessCoffee.dll" />
   </files>
 </package>

@@ -5,6 +5,7 @@
     <httpHandlers>
       <add path="*.coffee" type="DotSmart.CoffeeScriptHandler, LessCoffee" verb="*" validate="false"/>
       <add path="*.less" type="DotSmart.LessCssHandler, LessCoffee" verb="*" validate="false"/>
+      <add path="*.less.css" type="DotSmart.LessCssHandler, LessCoffee" verb="*" validate="false"/>
     </httpHandlers>
   </system.web>
 
@@ -13,6 +14,7 @@
     <handlers>
       <add path="*.coffee" type="DotSmart.CoffeeScriptHandler, LessCoffee" verb="*" name="DotSmart.CoffeeScriptHandler"/>
       <add path="*.less" type="DotSmart.LessCssHandler, LessCoffee" verb="*" name="DotSmart.LessCssHandler"/>
+      <add path="*.less.css" type="DotSmart.LessCssHandler, LessCoffee" verb="*" name="DotSmart.LessCssHandler"/>
     </handlers>
   </system.webServer>
 

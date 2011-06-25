@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace DotSmart
 {
-    class LessCssHandler : ScriptHandlerBase, IHttpHandler
+    public class LessCssHandler : ScriptHandlerBase, IHttpHandler
     {
         static string _lessJs;
         static string _lessWsf;
