@@ -44,6 +44,7 @@ namespace DotSmart
             response.Cache.SetETagFromFileDependencies();
             response.Cache.SetLastModifiedFromFileDependencies();
             response.Cache.SetCacheability(HttpCacheability.Public);
+            response.Cache.SetExpires(DateTime.Now.AddDays(1));
         }
     }
 }
