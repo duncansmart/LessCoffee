@@ -8,7 +8,6 @@ namespace DotSmart
     {
         protected static DateTime CompileDate = File.GetLastWriteTime(typeof(CoffeeScriptHandler).Assembly.Location);
 
-        static object _mutex = new object();
         static string _tempDirectory;
 
         protected static string TempDirectory
@@ -19,11 +18,15 @@ namespace DotSmart
                     return _tempDirectory;
 
                 _tempDirectory = Path.Combine(HttpRuntime.CodegenDir, "LessCoffee");
-                lock (_mutex)
+                if (!Directory.Exists(_tempDirectory))
                 {
-                    if (!Directory.Exists(_tempDirectory))
+                    try
+                    {
                         Directory.CreateDirectory(_tempDirectory);
+                    }
+                    catch (IOException){/*another thread got there*/}
                 }
+
                 return _tempDirectory;
             }
         }
