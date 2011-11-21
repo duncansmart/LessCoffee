@@ -78,7 +78,7 @@ namespace DotSmart
                 string currentDirectory = Environment.CurrentDirectory;
                 Environment.CurrentDirectory = Path.GetDirectoryName(scriptFileName);
 
-                int exitCode = ProcessUtil.Exec("cscript.exe", "//U //nologo \"" + _lessWsf + "\" -", scriptFile, output, stdErr, Encoding.Unicode);
+                int exitCode = executeJs(_lessWsf, "-", scriptFile, output, stdErr);
                 if (exitCode != 0)
                 {
                     output.WriteLine("/* Error in " + Path.GetFileName(scriptFileName).JsEncode() + ": "
@@ -86,6 +86,12 @@ namespace DotSmart
                 }
                 Environment.CurrentDirectory = currentDirectory;
             }
+        }
+
+        int executeJs(string scriptPath, string args, StreamReader stdin, TextWriter stdout, StringWriter stderr)
+        {
+            int exitCode = ProcessUtil.Exec("cscript.exe", "//B //E:JScript //U //nologo \"" + scriptPath + "\" " + args, stdin, stdout, stderr, Encoding.Unicode);
+            return exitCode;
         }
 
         public bool IsReusable
