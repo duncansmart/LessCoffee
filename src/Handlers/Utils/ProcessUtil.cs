@@ -42,8 +42,9 @@ namespace DotSmart
 
                 if (stdIn != null)
                 {
-                    using (var unicodeStdIn = new StreamWriter(process.StandardInput.BaseStream, encoding))
-                        unicodeStdIn.Write(stdIn.ReadToEnd());
+                    // There's no Process.Standard*Input*Encoding, so write specified encoding's raw bytes to base input stream
+                    using (var encodedStdIn = new StreamWriter(process.StandardInput.BaseStream, encoding))
+                        encodedStdIn.Write(stdIn.ReadToEnd());
                 }
 
                 process.WaitForExit();
