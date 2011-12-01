@@ -7,6 +7,11 @@ namespace DotSmart
 {
     class ProcessUtil
     {
+        public static int Exec(string filename, string args, TextReader stdIn, TextWriter stdOut, TextWriter stdErr)
+        {
+            return Exec(filename, args, stdIn, stdOut, stdErr, null);
+        }
+
         public static int Exec(string filename, string args, TextReader stdIn, TextWriter stdOut, TextWriter stdErr, Encoding encoding)
         {
             using (Process process = new Process())
@@ -18,9 +23,11 @@ namespace DotSmart
                 psi.FileName = filename;
                 psi.Arguments = args;
 
-                psi.StandardOutputEncoding = encoding;
-                psi.StandardErrorEncoding = encoding;
-                
+                if (encoding != null)
+                {
+                    psi.StandardOutputEncoding = encoding;
+                    psi.StandardErrorEncoding = encoding;
+                }
 
                 if (stdOut != null)
                 {
@@ -42,9 +49,17 @@ namespace DotSmart
 
                 if (stdIn != null)
                 {
-                    // There's no Process.Standard*Input*Encoding, so write specified encoding's raw bytes to base input stream
-                    using (var encodedStdIn = new StreamWriter(process.StandardInput.BaseStream, encoding))
-                        encodedStdIn.Write(stdIn.ReadToEnd());
+                    if (encoding != null)
+                    {
+                        // There's no Process.Standard*Input*Encoding, so write specified encoding's raw bytes to base input stream
+                        using (var encodedStdIn = new StreamWriter(process.StandardInput.BaseStream, encoding))
+                            encodedStdIn.Write(stdIn.ReadToEnd());
+                    }
+                    else
+                    {
+                        using (process.StandardInput)
+                            process.StandardInput.Write(stdIn.ReadToEnd());
+                    }
                 }
 
                 process.WaitForExit();

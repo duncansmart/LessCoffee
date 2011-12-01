@@ -7,9 +7,9 @@ using System.Text;
 
 namespace DotSmart
 {
-	[TestFixture]
-	public class ProcessUtil_Tests
-	{
+    [TestFixture]
+    public class ProcessUtil_Tests
+    {
         string _jscriptPath;
 
         [TestFixtureSetUp]
@@ -34,18 +34,44 @@ namespace DotSmart
             using (var stderr = new StringWriter())
             using (var stdout = new StringWriter())
             {
-                int exitCode = executeJScript(_jscriptPath, null, stdin, stdout, stderr);
+                int exitCode = executeJScript(_jscriptPath, null, stdin, stdout, stderr, Encoding.Unicode);
                 Assert.AreEqual(0, exitCode);
                 Assert.AreEqual(inputString, stdout.ToString().TrimEnd());
             }
         }
 
-        int executeJScript(string scriptPath, string args, TextReader stdin, TextWriter stdout, TextWriter stderr)
+        [Test]
+        public void StdErrorIsReadable()
         {
-            int exitCode = ProcessUtil.Exec("cscript.exe", "//B //U //E:JScript //nologo \"" + scriptPath + "\" " + args, stdin, stdout, stderr, Encoding.Unicode);
+            var jscriptPath = Path.GetTempFileName();
+            File.WriteAllText(jscriptPath, "cause_error()");
+            Debug.WriteLine(jscriptPath);
+
+            using (var stdin = new StringReader("Hello world!"))
+            using (var stderr = new StringWriter())
+            using (var stdout = new StringWriter())
+            {
+                int exitCode = executeJScript(jscriptPath, null, stdin, stdout, stderr, Encoding.Default);
+                //Debug.WriteLine("exit: '" + exitCode + "'");
+                //Debug.WriteLine("stdout: '" + stdout + "'");
+                //Debug.WriteLine("stderr: '" + stderr + "'");
+                
+                Assert.That(stderr.ToString(), Is.StringContaining("Microsoft JScript runtime error: Object expected"));
+            }
+            File.Delete(jscriptPath);
+        }
+
+        int executeJScript(string scriptPath, string args, TextReader stdin, TextWriter stdout, TextWriter stderr, Encoding encoding)
+        {
+            args = "//E:JScript //nologo \"" + scriptPath + "\" " + args;
+
+            if (encoding == Encoding.Unicode)
+                args = "//U " + args;
+
+            int exitCode = ProcessUtil.Exec("cscript.exe", args, stdin, stdout, stderr, encoding);
             return exitCode;
         }
 
-	}
+    }
 }
 #endif

@@ -36,15 +36,13 @@ namespace DotSmart
 
             string lessFile = context.Server.MapPath(context.Request.FilePath);
 
-            renderStylesheet(lessFile, context.Response.Output);
-
-            // TODO: consider rendering error info like so:
-            //context.Response.Write("body:after{ content: \"A LESS error occurred!\" }");
-
-            // look for "@import" and add those to dependencies also
-            var lessFiles = parseImports(lessFile).Concat(new[] { lessFile }).ToArray();
-
-            SetCacheability(context.Response, lessFiles);
+            bool success = renderStylesheet(lessFile, context.Response.Output);
+            if (success)
+            {
+                // look for "@import" and add those to dependencies also
+                var lessFiles = parseImports(lessFile).Concat(new[] { lessFile }).ToArray();
+                SetCacheability(context.Response, lessFiles);
+            }
         }
 
         static IEnumerable<string> parseImports(string lessFileName)
@@ -69,9 +67,10 @@ namespace DotSmart
             );
         }
 
-        void renderStylesheet(string scriptFileName, TextWriter output)
+        bool renderStylesheet(string scriptFileName, TextWriter output)
         {
-            using (var scriptFile = new StreamReader(scriptFileName, Encoding.UTF8))
+            bool success = true;
+            using (var scriptFile = new StreamReader(scriptFileName))
             using (var stdErr = new StringWriter())
             {
                 // So that relative @import paths resolve
@@ -81,16 +80,21 @@ namespace DotSmart
                 int exitCode = executeJs(_lessWsf, "-", scriptFile, output, stdErr);
                 if (exitCode != 0)
                 {
-                    output.WriteLine("/* Error in " + Path.GetFileName(scriptFileName).JsEncode() + ": "
+                    // TODO: consider rendering error info like so:
+                    //output.Write("body:after{ content: \"A LESS error occurred!\" }");
+
+                    output.WriteLine("/* Error in " + Path.GetFileName(scriptFileName).JsEncode() + ": \r\n"
                         + stdErr.ToString().Trim() + " */");
+                    success = false;
                 }
                 Environment.CurrentDirectory = currentDirectory;
+                return success;
             }
         }
 
         int executeJs(string scriptPath, string args, TextReader stdin, TextWriter stdout, StringWriter stderr)
         {
-            int exitCode = ProcessUtil.Exec("cscript.exe", "//B //E:JScript //U //nologo \"" + scriptPath + "\" " + args, stdin, stdout, stderr, Encoding.Unicode);
+            int exitCode = ProcessUtil.Exec("cscript.exe", "//nologo \"" + scriptPath + "\" " + args, stdin, stdout, stderr);
             return exitCode;
         }
 
