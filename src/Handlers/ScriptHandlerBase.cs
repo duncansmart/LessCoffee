@@ -64,6 +64,12 @@ namespace DotSmart
             response.Cache.SetLastModifiedFromFileDependencies();
             response.Cache.SetCacheability(HttpCacheability.Public);
             response.Cache.SetExpires(DateTime.Now.AddDays(1));
+
+            // So we can use cache-busting params on URL
+            response.Cache.VaryByParams["*"] = true;
+
+            // Old IE stops caching if it gets a "Vary: *" header
+            response.Cache.SetOmitVaryStar(true);
         }
     }
 }
