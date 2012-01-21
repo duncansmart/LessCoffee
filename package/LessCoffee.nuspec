@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>LessCoffee</id>
-    <version>1.0.3.2</version>
+    <version>1.0.4.0</version>
     <authors>Duncan Smart</authors>
     <owners>Duncan Smart</owners>
     <projectUrl>https://github.com/duncansmart/LessCoffee</projectUrl>
+    <id>LessCoffee</id>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>HTTP handlers that transform *.less and *.coffee files into CSS and JavaScript resepectively on the fly.</description>
     <tags>less css javascript coffeescript</tags>

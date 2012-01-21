@@ -1,6 +1,7 @@
 using System;
 using System.Web;
 using System.IO;
+using System.Web.Configuration;
 
 namespace DotSmart
 {
@@ -37,6 +38,21 @@ namespace DotSmart
             {
                 File.WriteAllBytes(fileName, resource);
                 File.SetLastWriteTime(fileName, CompileDate);
+            }
+        }
+
+
+        static bool? _debugMode;
+        protected bool DebugMode
+        {
+            get
+            {
+                if (_debugMode == null)
+                {
+                    var compilationSection = WebConfigurationManager.GetSection("system.web/compilation") as CompilationSection;
+                    _debugMode = (compilationSection != null && compilationSection.Debug);
+                }
+                return _debugMode.Value;
             }
         }
 
