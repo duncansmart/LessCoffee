@@ -7,12 +7,7 @@ namespace DotSmart
 {
     class ProcessUtil
     {
-        public static int Exec(string filename, string args, TextReader stdIn, TextWriter stdOut, TextWriter stdErr)
-        {
-            return Exec(filename, args, stdIn, stdOut, stdErr, null);
-        }
-
-        public static int Exec(string filename, string args, TextReader stdIn, TextWriter stdOut, TextWriter stdErr, Encoding encoding)
+        public static int Exec(string filename, string args, TextReader stdIn, TextWriter stdOut, TextWriter stdErr, Encoding encoding = null, string workingDirectory = null)
         {
             using (Process process = new Process())
             {
@@ -22,6 +17,8 @@ namespace DotSmart
                 psi.CreateNoWindow = true;
                 psi.FileName = filename;
                 psi.Arguments = args;
+                if (workingDirectory != null)
+                    psi.WorkingDirectory = workingDirectory;
 
                 if (encoding != null)
                 {

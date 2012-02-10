@@ -67,34 +67,41 @@ namespace DotSmart
             );
         }
 
-        bool renderStylesheet(string scriptFileName, TextWriter output)
+        bool renderStylesheet(string lessFilePath, TextWriter output)
         {
-            bool success = true;
-            using (var scriptFile = new StreamReader(scriptFileName))
-            using (var stdErr = new StringWriter())
+            try
             {
-                // So that relative @import paths resolve
-                string currentDirectory = Environment.CurrentDirectory;
-                Environment.CurrentDirectory = Path.GetDirectoryName(scriptFileName);
-
-                int exitCode = executeJs(_lessWsf, "- " + (DebugMode ? "" : "-compress"), scriptFile, output, stdErr);
-                if (exitCode != 0)
-                {
-                    // TODO: consider rendering error info like so:
-                    //output.Write("body:after{ content: \"A LESS error occurred!\" }");
-
-                    output.WriteLine("/* Error in " + Path.GetFileName(scriptFileName) + ": \r\n"
-                        + stdErr.ToString().Trim() + " */");
-                    success = false;
-                }
-                Environment.CurrentDirectory = currentDirectory;
-                return success;
+                RenderCss(lessFilePath, output, compress: !DebugMode);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                output.WriteLine("/* " + ex.Message + " */");
+                return false;
             }
         }
 
-        int executeJs(string scriptPath, string args, TextReader stdin, TextWriter stdout, StringWriter stderr)
+        public static void RenderCss(string lessFilePath, TextWriter output, bool compress = true, string lessPrologue = null)
         {
-            int exitCode = ProcessUtil.Exec("cscript.exe", "//nologo \"" + scriptPath + "\" " + args, stdin, stdout, stderr);
+            TextReader lessFile;
+            if (lessPrologue != null)
+                lessFile = new StringReader(lessPrologue + File.ReadAllText(lessFilePath));
+            else
+                lessFile = new StreamReader(lessFilePath);
+
+            using (lessFile)
+            using (var stdErr = new StringWriter())
+            {
+                // So that relative @import paths resolve
+                int exitCode = executeJs(_lessWsf, "- " + (compress ? "-compress" : ""), lessFile, output, stdErr, Path.GetDirectoryName(lessFilePath));
+                if (exitCode != 0)
+                    throw new ApplicationException("Error " + exitCode + " in '" + lessFilePath + "': " + stdErr.ToString().Trim());
+            }
+        }
+
+        static int executeJs(string scriptPath, string args, TextReader stdin, TextWriter stdout, StringWriter stderr, string workingDirectory)
+        {
+            int exitCode = ProcessUtil.Exec("cscript.exe", "//nologo \"" + scriptPath + "\" " + args, stdin, stdout, stderr, workingDirectory: workingDirectory);
             return exitCode;
         }
 
