@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <version>1.0.5.0</version>
+    <version>2.0.0.0</version>
     <authors>Duncan Smart</authors>
     <owners>Duncan Smart</owners>
     <projectUrl>https://github.com/duncansmart/LessCoffee</projectUrl>

@@ -51,15 +51,17 @@
     <Content Include="Default.aspx" />
     <None Include="CoffeeScriptTest\coffee-script.js" />
     <Content Include="CoffeeScriptTest\test.html" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <None Include="lib1.less" />
-    <None Include="test1.less" />
+    <None Include="lesstest\lib\lib1.less" />
+    <None Include="lesstest\test1.less" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Default.aspx.cs">
@@ -139,4 +141,13 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <LessCoffeeFiles Include="..\Handlers\LessCoffee\**\*">
+      <Visible>False</Visible>
+    </LessCoffeeFiles>
+  </ItemGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
 </Project>

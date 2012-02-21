@@ -2,6 +2,8 @@ using System;
 using System.Web;
 using System.IO;
 using System.Web.Configuration;
+using System.Diagnostics;
+using DotSmart.Properties;
 
 namespace DotSmart
 {
@@ -9,7 +11,15 @@ namespace DotSmart
     {
         protected static DateTime CompileDate = File.GetLastWriteTime(typeof(CoffeeScriptHandler).Assembly.Location);
 
+        protected static string NodeExe;
+
         static string _tempDirectory;
+
+        static ScriptHandlerBase()
+        {
+            extractNodeJs();
+            NodeExe = Path.Combine(TempDirectory, @"node.exe");
+        }
 
         protected static string TempDirectory
         {
@@ -30,6 +40,15 @@ namespace DotSmart
 
                 return _tempDirectory;
             }
+        }
+
+        static void extractNodeJs()
+        {
+            var tgzStream = new MemoryStream(Resources.NodeJsTgz);
+            var tarStream = new System.IO.Compression.GZipStream(tgzStream, System.IO.Compression.CompressionMode.Decompress, false);
+            var untar = new DotSmart.LessCoffee.UnTar();
+            Debug.WriteLine("Untar-ing to " + TempDirectory);
+            untar.Extract(tarStream, TempDirectory);
         }
 
         protected static void ExportResourceIfNewer(string fileName, byte[] resource)

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>LessCoffee test page</title>
-    <link rel="stylesheet" href="test1.less" />
+    <link rel="stylesheet" href="lesstest/test1.less" />
 </head>
 <body>
     <form id="form1" runat="server">
