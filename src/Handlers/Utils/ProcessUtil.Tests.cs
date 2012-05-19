@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DotSmart
 {
-    [TestFixture]
+    [TestFixture, Ignore]
     public class ProcessUtil_Tests
     {
         string _jscriptPath;
