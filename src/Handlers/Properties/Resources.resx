@@ -118,19 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="CoffeeScriptJs" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\coffee-script.js;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="CoffeeWsf" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\coffee.wsf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="LessJs" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\less.js;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="LessWsf" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\lessc.wsf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="NodeJsTgz" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\nodejs.tgz;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
