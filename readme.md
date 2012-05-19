@@ -2,7 +2,7 @@
 
 HTTP handlers for ASP.NET web sites that transform *.less and *.coffee files into CSS and JavaScript respectively on the fly.
 
-This implementation is based on [less.js-windows](https://github.com/duncansmart/less.js-windows) and [coffeescript-windows](https://github.com/duncansmart/coffeescript-windows) which run the original JavaScript implementations of LESS and CoffeeScript under Windows Script Host. Therefore this is a **Windows-only** solution and won't run under Mono. There are other implementations of LESS and CoffeeScript for .NET that use pure .NET-based JavaScript compilers so use those if you're wanting to target Mono.
+As of version 2.0 the project uses an embedded version of nodejs (embedded as a resource and extracted at runtime) to run the latest versions of the LESS and CoffeeScript (previously it used [less.js-windows](https://github.com/duncansmart/less.js-windows) and [coffeescript-windows](https://github.com/duncansmart/coffeescript-windows)).
 
 ## Install
 
