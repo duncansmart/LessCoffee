@@ -84,37 +84,31 @@ namespace DotSmart
                 lessFile = new StreamReader(lessFilePath);
 
             using (lessFile)
-            using (var stdErr = new StringWriter())
+            using (var errors = new StringWriter())
             {
-                // So that relative @import paths resolve
                 int exitCode = ProcessUtil.Exec(NodeExe,
-                    "\""+ _lessc +"\""
-                    + " - " + (compress ? " --yui-compress" : "")
-                    + " --include-path=\"" + Path.GetDirectoryName(lessFilePath) + "\""
-                    + " --no-color",
-                    lessFile,
-                    output, stdErr);
+                    args: "\"" + _lessc + "\""
+                        + " - " // read from stdidn
+                        + (compress ? " --yui-compress" : "")
+                        + " --include-path=\"" + Path.GetDirectoryName(lessFilePath) + "\""
+                        + " --no-color",
+                    stdIn: lessFile,
+                    stdOut: output,
+                    stdErr: errors);
                 if (exitCode != 0)
                 {
-                    throw new ApplicationException(string.Format("Error {0} in '{1}': \r\n{2}", 
-                                                       exitCode, 
-                                                       lessFilePath, 
-                                                       stdErr.ToString().Trim()));
+                    throw new ApplicationException(string.Format("Error {0} in '{1}': \r\n{2}",
+                                                    exitCode,
+                                                    lessFilePath,
+                                                    errors.ToString().Trim()));
                 }
             }
         }
-
-        //static string removeAnsiColors(string str)
-        //{
-        //    // ANSI escape sequences for colors are of the form "ESC[NNm"
-        //    return Regex.Replace(str, @"\e\[\d+m", "");
-        //}
 
         public bool IsReusable
         {
             get { return false; }
         }
-
 
     }
 }
