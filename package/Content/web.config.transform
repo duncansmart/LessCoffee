@@ -7,6 +7,17 @@
       <add path="*.less" type="DotSmart.LessCssHandler, LessCoffee" verb="*" validate="false"/>
       <add path="*.less.css" type="DotSmart.LessCssHandler, LessCoffee" verb="*" validate="false"/>
     </httpHandlers>
+    
+    <caching>
+      <outputCacheSettings>
+        <outputCacheProfiles>
+          <!-- 1 year = 31536000 secs -->
+          <add name="LessCoffee" duration="31536000" location="Any" varyByParam="*" />
+        </outputCacheProfiles>
+      </outputCacheSettings>
+      <outputCache omitVaryStar="true" />
+    </caching>
+
   </system.web>
 
   <system.webServer>
@@ -17,5 +28,6 @@
       <add path="*.less.css" type="DotSmart.LessCssHandler, LessCoffee" verb="*" name="DotSmart.LessCssHandler2"/>
     </handlers>
   </system.webServer>
+
 
 </configuration>
