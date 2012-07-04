@@ -1,14 +1,19 @@
 using System;
+using System.Linq;
 using System.Web;
 using System.IO;
 using System.Web.Configuration;
 using System.Diagnostics;
 using DotSmart.Properties;
+using System.Web.UI;
+using System.Collections.Generic;
+using System.Web.Caching;
 
 namespace DotSmart
 {
-    public abstract class ScriptHandlerBase
+    public abstract class ScriptHandlerBase : IHttpHandler
     {
+        private const string CACHE_PROFILE_NAME = "LessCoffee";
         protected static DateTime CompileDate = File.GetLastWriteTime(typeof(CoffeeScriptHandler).Assembly.Location);
 
         protected static string NodeExe;
@@ -21,6 +26,15 @@ namespace DotSmart
             NodeExe = Path.Combine(TempDirectory, @"node.exe");
         }
 
+        protected abstract void Render(string physicalFileName, TextWriter output);
+
+        protected abstract string ContentType { get; }
+
+        protected virtual IEnumerable<string> GetFileDependencies(string physicalFileName)
+        {
+            return Enumerable.Empty<string>();
+        }
+
         protected static string TempDirectory
         {
             get
@@ -28,18 +42,67 @@ namespace DotSmart
                 if (_tempDirectory != null)
                     return _tempDirectory;
 
-                _tempDirectory = Path.Combine(HttpRuntime.CodegenDir, "LessCoffee");
+                _tempDirectory = Path.Combine(HttpRuntime.CodegenDir, CACHE_PROFILE_NAME);
                 if (!Directory.Exists(_tempDirectory))
                 {
                     try
                     {
                         Directory.CreateDirectory(_tempDirectory);
                     }
-                    catch (IOException){/*another thread got there*/}
+                    catch (IOException) {/*another thread got there*/}
                 }
 
                 return _tempDirectory;
             }
+        }
+
+        public void ProcessRequest(HttpContext context)
+        {
+            var physicalFileName = context.Server.MapPath(context.Request.FilePath);
+
+            var dependentFiles = GetFileDependencies(physicalFileName) ?? Enumerable.Empty<string>();
+            dependentFiles = dependentFiles.Concat(new[] { physicalFileName }); // ensure this file is included
+            context.Response.AddCacheDependency(new CacheDependency(dependentFiles.ToArray()));
+
+            Render(physicalFileName, context.Response.Output);
+
+            // Process with caching ()
+            OutputCacheParameters cacheParams = getCacheParams();
+            using (OutputCachedPage page = new OutputCachedPage(cacheParams))
+            {
+                page.ProcessRequest(context);
+            }
+
+            // has to be done here as Page seems to overwrite it.
+            context.Response.ContentType = ContentType;
+
+            var cache = context.Response.Cache;
+            cache.SetETagFromFileDependencies();
+            cache.SetLastModifiedFromFileDependencies();
+            cache.SetOmitVaryStar(true); // Old IE stops caching if it gets a "Vary: *" header
+        }
+
+        static OutputCacheParameters getCacheParams()
+        {
+            OutputCacheParameters cacheParams;
+            if (cacheProfileExists(CACHE_PROFILE_NAME))
+            {
+                cacheParams = new OutputCacheParameters
+                {
+                    CacheProfile = CACHE_PROFILE_NAME
+                };
+            }
+            else // default
+            {
+                cacheParams = new OutputCacheParameters
+                {
+                    Duration = 86400, // 1 day
+                    Enabled = true,
+                    Location = OutputCacheLocation.Any,
+                    VaryByParam = "*"
+                };
+            }
+            return cacheParams;
         }
 
         static void extractNodeJs()
@@ -60,7 +123,6 @@ namespace DotSmart
             }
         }
 
-
         static bool? _debugMode;
         protected bool DebugMode
         {
@@ -75,20 +137,39 @@ namespace DotSmart
             }
         }
 
-        protected void SetCacheability(HttpResponse response, params string[] scriptFileNames)
+        static bool cacheProfileExists(string cacheProfileName)
         {
-            response.AddCacheDependency(new System.Web.Caching.CacheDependency(scriptFileNames));
-
-            response.Cache.SetETagFromFileDependencies();
-            response.Cache.SetLastModifiedFromFileDependencies();
-            response.Cache.SetCacheability(HttpCacheability.Public);
-            response.Cache.SetExpires(DateTime.Now.AddDays(1));
-
-            // So we can use cache-busting params on URL
-            response.Cache.VaryByParams["*"] = true;
-
-            // Old IE stops caching if it gets a "Vary: *" header
-            response.Cache.SetOmitVaryStar(true);
+            var webConfig = WebConfigurationManager.OpenWebConfiguration(null);
+            var outputCacheSettings = (OutputCacheSettingsSection)webConfig.GetSection("system.web/caching/outputCacheSettings");
+            var profile = outputCacheSettings.OutputCacheProfiles[cacheProfileName];
+            return (profile != null);
         }
+
+        public bool IsReusable
+        {
+            get { return false; }
+        }
+
+        // Borrowed from System.Web.Mvc.OutputCacheAttribute+OutputCachedPage
+        class OutputCachedPage : System.Web.UI.Page
+        {
+            // Fields
+            OutputCacheParameters _cacheParams;
+
+            // Methods
+            public OutputCachedPage(OutputCacheParameters cacheParams)
+            {
+                this.ID = Guid.NewGuid().ToString();
+                this._cacheParams = cacheParams;
+            }
+
+            protected override void FrameworkInitialize()
+            {
+                base.FrameworkInitialize();
+                this.InitOutputCache(this._cacheParams);
+            }
+        }
+
+
     }
 }
