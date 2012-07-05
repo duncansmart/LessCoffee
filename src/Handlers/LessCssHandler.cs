@@ -71,24 +71,29 @@ namespace DotSmart
             }
         }
 
-        public static void RenderCss(string lessFilePath, TextWriter output, bool compress = true, string lessPrologue = null)
+        public static void RenderCss(string lessFilePath, TextWriter output, bool compress = true, string lessPrologue = null, string lessPostscript = null)
         {
-            TextReader lessFile;
-            if (lessPrologue != null)
-                lessFile = new StringReader(lessPrologue + File.ReadAllText(lessFilePath));
-            else
-                lessFile = new StreamReader(lessFilePath);
+            TextReader lessStream;
 
-            using (lessFile)
+            string lessSrc = File.ReadAllText(lessFilePath);
+            lessStream = new StringReader(
+                lessPrologue
+                + lessSrc
+                + lessPostscript
+                );
+
+            using (lessStream)
             using (var errors = new StringWriter())
             {
+                string args = "\"" + _lessc + "\""
+                    + " -" // read from stdin
+                    + (compress ? " --yui-compress" : "")
+                    // lessc can't handle Windows quoted long file names 
+                    + " --include-path=" + FileUtil.GetShortName(Path.GetDirectoryName(lessFilePath))
+                    + " --no-color";
                 int exitCode = ProcessUtil.Exec(NodeExe,
-                    args: "\"" + _lessc + "\""
-                        + " - " // read from stdidn
-                        + (compress ? " --yui-compress" : "")
-                        + " --include-path=\"" + Path.GetDirectoryName(lessFilePath) + "\""
-                        + " --no-color",
-                    stdIn: lessFile,
+                    args: args,
+                    stdIn: lessStream,
                     stdOut: output,
                     stdErr: errors);
                 if (exitCode != 0)
