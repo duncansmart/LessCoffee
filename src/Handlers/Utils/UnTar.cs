@@ -482,8 +482,7 @@ namespace DotSmart.LessCoffee
                 return _s;
             }
         }
-        // member variables
-        private Stream _outfs = null;
+
     }
 
     /// <summary>
