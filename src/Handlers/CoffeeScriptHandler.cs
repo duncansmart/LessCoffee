@@ -53,11 +53,5 @@ namespace DotSmart
                 }
             }
         }
-
-        public bool IsReusable
-        {
-            get { return false; }
-        }
-
     }
 }
