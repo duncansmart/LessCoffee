@@ -12,7 +12,7 @@ namespace DotSmart
 {
     public class LessCssHandler : ScriptHandlerBase
     {
-        static string _lesscompiler;
+
         static string _lessc;
 
         /// <summary>
@@ -57,11 +57,15 @@ namespace DotSmart
             );
         }
 
-        bool renderStylesheet(string lessFilePath, TextWriter output)
+        internal static bool renderStylesheet(string lessFilePath, TextWriter output)
         {
             try
             {
-                RenderCss(lessFilePath, output, compress: !DebugMode);
+                string postscript = null;
+                if (GetPostscript != null)
+                    postscript = GetPostscript.GetInvocationList().Cast<Func<string, string>>().Select(func => func(lessFilePath)).Join(Environment.NewLine);
+
+                RenderCss(lessFilePath, output, compress: !DebugMode, lessPostscript: postscript);
                 return true;
             }
             catch (Exception ex)
@@ -70,6 +74,13 @@ namespace DotSmart
                 return false;
             }
         }
+
+        /// <summary>
+        /// Here you can dynamically append extra bits of LESS script at 
+        /// runtime e.g. variable overrides. For example you could grab 
+        /// user's favourite colour from database.
+        /// </summary>
+        public static event Func<string, string> GetPostscript;
 
         public static void RenderCss(string lessFilePath, TextWriter output, bool compress = true, string lessPrologue = null, string lessPostscript = null)
         {

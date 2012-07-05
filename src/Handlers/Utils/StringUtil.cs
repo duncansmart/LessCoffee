@@ -47,5 +47,16 @@ namespace DotSmart
             return safe.ToString();
         }
 
+        public static string Join(this IEnumerable<string> values, string delimiter = "")
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (string value in values)
+            {
+                sb.Append(value);
+                sb.Append(delimiter);
+            }
+            return sb.ToString();
+        }
+
     }
 }

@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="CoffeeScriptHandler.cs" />
     <Compile Include="LessCssHandler.cs" />
+    <Compile Include="Tests\LessTests.cs" />
     <Compile Include="Utils\FileUtil.cs" />
     <Compile Include="Utils\ProcessUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,9 +82,7 @@
   <ItemGroup>
     <None Include="nodejs\**" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tests\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>$(ProjectDir)\tar-node.cmd</PreBuildEvent>

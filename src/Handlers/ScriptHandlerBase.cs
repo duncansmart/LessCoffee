@@ -42,7 +42,8 @@ namespace DotSmart
                 if (_tempDirectory != null)
                     return _tempDirectory;
 
-                _tempDirectory = Path.Combine(HttpRuntime.CodegenDir, CACHE_PROFILE_NAME);
+                
+                _tempDirectory = Path.Combine(HttpRuntime.AppDomainId != null ? HttpRuntime.CodegenDir : Path.GetTempPath(), "LessCoffee");
                 if (!Directory.Exists(_tempDirectory))
                 {
                     try
@@ -124,7 +125,7 @@ namespace DotSmart
         }
 
         static bool? _debugMode;
-        protected bool DebugMode
+        static protected bool DebugMode
         {
             get
             {
