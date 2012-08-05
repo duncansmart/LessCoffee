@@ -10,7 +10,7 @@ namespace DotSmart.LessCoffee.Tests
 {
 #if DEBUG
 
-    [TestFixture]
+    [TestFixture, Explicit]
     class LessTests
     {
 

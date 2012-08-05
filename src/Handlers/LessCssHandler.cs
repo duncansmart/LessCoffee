@@ -70,7 +70,7 @@ namespace DotSmart
             }
             catch (Exception ex)
             {
-                output.WriteLine("/* " + ex.Message + " */");
+                output.WriteLine("/* ERROR: " + ex.Message + " */");
                 return false;
             }
         }
@@ -96,11 +96,14 @@ namespace DotSmart
             using (lessStream)
             using (var errors = new StringWriter())
             {
+                string dirname = Path.GetDirectoryName(lessFilePath);
+                if (dirname.Contains(' '))
+                    throw new ApplicationException("lessc doesn't support file paths with spaces");
+
                 string args = "\"" + _lessc + "\""
                     + " -" // read from stdin
                     + (compress ? " --yui-compress" : "")
-                    // lessc can't handle Windows quoted long file names 
-                    + " --include-path=" + FileUtil.GetShortName(Path.GetDirectoryName(lessFilePath))
+                    + " --include-path=" + dirname
                     + " --no-color";
                 int exitCode = ProcessUtil.Exec(NodeExe,
                     args: args,

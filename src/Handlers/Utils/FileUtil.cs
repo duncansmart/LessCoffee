@@ -8,7 +8,7 @@ namespace DotSmart
 {
     static class FileUtil
     {
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         static extern uint GetShortPathName(string lpszLongPath, StringBuilder lpszShortPath, uint cchBuffer);
 
         public static string GetShortName(string path)
