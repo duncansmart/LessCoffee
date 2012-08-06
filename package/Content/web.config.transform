@@ -11,8 +11,8 @@
     <caching>
       <outputCacheSettings>
         <outputCacheProfiles>
-          <!-- 1 year = 31536000 secs -->
-          <add name="LessCoffee" duration="31536000" location="Any" varyByParam="*" />
+          <!-- 30 days = 2592000 secs -->
+          <add name="LessCoffee" duration="2592000" location="Any" varyByParam="*" />
         </outputCacheProfiles>
       </outputCacheSettings>
       <outputCache omitVaryStar="true" />
