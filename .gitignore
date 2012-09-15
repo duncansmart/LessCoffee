@@ -44,6 +44,4 @@ _ReSharper*/
 # Office Temp Files
 ~$*
 package/*.nupkg
-src/Handlers/nodejs/node_modules/less/test/
-src/Handlers/nodejs/node_modules/less/dist/
 src/Handlers/nodejs/node_modules/npm/
