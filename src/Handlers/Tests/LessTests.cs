@@ -19,7 +19,7 @@ namespace DotSmart.LessCoffee.Tests
         [TestFixtureSetUp]
         public void Setup()
         {
-            _testDir = Path.Combine(Path.GetTempPath(), "LessCoffee Tests " + Path.GetRandomFileName());
+            _testDir = Path.Combine(Path.GetTempPath(), "LessCoffee-Tests-" + Path.GetRandomFileName());
             Directory.CreateDirectory(_testDir);
         }
 
@@ -71,12 +71,23 @@ h1 {
             Assert.AreEqual("h1{color:#f00}", compile(less));
         }
 
+        [Test]
+        public void CompileBootstrap()
+        {
+            var output = new StringWriter();
+            LessCssHandler.RenderCss(@"..\Content\less\bootstrap.less", output);
+
+            Assert.AreEqual(98200, output.ToString().Length);
+        }
+
 
         string compile(string lessSource)
         {
             string filename = writeFile(Path.GetRandomFileName() + ".less", lessSource);
             var output = new StringWriter();
-            LessCssHandler.renderStylesheet(filename, output);
+            bool success = LessCssHandler.renderStylesheet(filename, output);
+            if (!success)
+                throw new ApplicationException("lessc error: " + output);
             string outputCss = output.ToString().Trim();
             return outputCss;
         }

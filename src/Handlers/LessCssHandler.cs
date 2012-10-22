@@ -98,7 +98,7 @@ namespace DotSmart
             {
                 string dirname = Path.GetDirectoryName(lessFilePath);
                 if (dirname.Contains(' '))
-                    throw new ApplicationException("lessc doesn't support file paths with spaces");
+                    throw new ApplicationException("lessc doesn't support file paths with spaces '" + dirname + "'");
 
                 string args = "\"" + _lessc + "\""
                     + " -" // read from stdin
