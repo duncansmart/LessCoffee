@@ -42,8 +42,8 @@ namespace DotSmart
                 if (_tempDirectory != null)
                     return _tempDirectory;
 
-                
-                _tempDirectory = Path.Combine(HttpRuntime.AppDomainId != null ? HttpRuntime.CodegenDir : Path.GetTempPath(), "LessCoffee");
+
+                _tempDirectory = Path.Combine(Path.GetTempPath(), "LessCoffee" + (HttpRuntime.AppDomainAppId ?? "").Replace('/', '-'));
                 if (!Directory.Exists(_tempDirectory))
                 {
                     try
