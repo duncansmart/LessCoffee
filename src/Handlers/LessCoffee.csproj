@@ -120,9 +120,6 @@
     <None Include="tar-node.cmd" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="nodejs\**" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
   </ItemGroup>
