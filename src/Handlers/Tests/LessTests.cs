@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if DEBUG
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,7 +9,6 @@ using System.Diagnostics;
 
 namespace DotSmart.LessCoffee.Tests
 {
-#if DEBUG
 
     [TestFixture, Explicit]
     class LessTests
@@ -34,10 +34,10 @@ namespace DotSmart.LessCoffee.Tests
         {
             string less = @"
 @foo: 'bar';
-#hello {
+.hello {
     world: @foo;
 }";
-            Assert.AreEqual("#hello{world:'bar'}", compile(less));
+            Assert.AreEqual(".hello{world:'bar'}", compile(less));
         }
 
         [Test]
@@ -50,11 +50,11 @@ namespace DotSmart.LessCoffee.Tests
 
             var result = compile(@"
 @import 'mixins1.less';
-#foo {
+.foo {
     .mymixin();
 }");
 
-            Assert.AreEqual("#foo{color:red}", result);
+            Assert.AreEqual(".foo{color:red}", result);
         }
 
         [Test]
@@ -99,5 +99,5 @@ h1 {
             return lessFile;
         }
     }
-#endif
 }
+#endif
