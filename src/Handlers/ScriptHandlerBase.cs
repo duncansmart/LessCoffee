@@ -78,7 +78,6 @@ namespace DotSmart
             context.Response.ContentType = ContentType;
 
             var cache = context.Response.Cache;
-            cache.SetETagFromFileDependencies();
             cache.SetLastModifiedFromFileDependencies();
             cache.SetOmitVaryStar(true); // Old IE stops caching if it gets a "Vary: *" header
         }
@@ -140,8 +139,7 @@ namespace DotSmart
 
         static bool cacheProfileExists(string cacheProfileName)
         {
-            var webConfig = WebConfigurationManager.OpenWebConfiguration(null);
-            var outputCacheSettings = (OutputCacheSettingsSection)webConfig.GetSection("system.web/caching/outputCacheSettings");
+            var outputCacheSettings = (OutputCacheSettingsSection)WebConfigurationManager.GetWebApplicationSection("system.web/caching/outputCacheSettings");
             var profile = outputCacheSettings.OutputCacheProfiles[cacheProfileName];
             return (profile != null);
         }
