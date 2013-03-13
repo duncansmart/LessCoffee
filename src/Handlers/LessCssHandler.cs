@@ -65,7 +65,10 @@ namespace DotSmart
                 if (GetPostscript != null)
                     postscript = GetPostscript.GetInvocationList().Cast<Func<string, string>>().Select(func => func(lessFilePath)).Join(Environment.NewLine);
 
-                RenderCss(lessFilePath, output, compress: !DebugMode, lessPostscript: postscript);
+                RenderCss(lessFilePath, output, 
+                    compress: !DebugMode, 
+                    lessPostscript: postscript, 
+                    lineNumbers: DebugMode ? "all" : null);
                 return true;
             }
             catch (Exception ex)
@@ -82,7 +85,7 @@ namespace DotSmart
         /// </summary>
         public static event Func<string, string> GetPostscript;
 
-        public static void RenderCss(string lessFilePath, TextWriter output, bool compress = true, string lessPrologue = null, string lessPostscript = null)
+        public static void RenderCss(string lessFilePath, TextWriter output, bool compress = true, string lessPrologue = null, string lessPostscript = null, string lineNumbers = null)
         {
             TextReader lessStream;
 
@@ -100,11 +103,42 @@ namespace DotSmart
                 if (dirname.Contains(' '))
                     throw new ApplicationException("lessc doesn't support file paths with spaces '" + dirname + "'");
 
+                /*
+                    usage: lessc [option option=parameter ...] <source> [destination]
+
+                    If source is set to `-' (dash or hyphen-minus), input is read from stdin.
+
+                    options:
+                        -h, --help              Print help (this message) and exit.
+                        --include-path          Set include paths. Separated by `:'. Use `;' on Windows.
+                        --no-color              Disable colorized output.
+                        -s, --silent            Suppress output of error messages.
+                        --strict-imports        Force evaluation of imports.
+                        --verbose               Be verbose.
+                        -v, --version           Print version number and exit.
+                        -x, --compress          Compress output by removing some whitespaces.
+                        --yui-compress          Compress output using ycssmin
+                        -O0, -O1, -O2           Set the parser's optimization level. The lower
+                                                the number, the less nodes it will create in the
+                                                tree. This could matter for debugging, or if you
+                                                want to access the individual nodes in the tree.
+                        --line-numbers=TYPE     Outputs filename and line numbers.
+                                                TYPE can be either 'comments', which will output
+                                                the debug info within comments, 'mediaquery'
+                                                that will output the information within a fake
+                                                media query which is compatible with the SASS
+                                                format, and 'all' which will do both.
+                        -rp, --rootpath         Set rootpath for url rewriting in relative imports and urls.
+                                                Works with or withour the relative-urls option.
+                        -ru, --relative-urls    re-write relative urls to the base less file.
+                 */
+
                 string args = "\"" + _lessc + "\""
                     + " -" // read from stdin
                     + (compress ? " --yui-compress" : "")
                     + " --include-path=" + dirname
-                    + " --no-color";
+                    + " --no-color"
+                    + (lineNumbers != null ? " --line-numbers=" + lineNumbers : "");
                 int exitCode = ProcessUtil.Exec(NodeExe,
                     args: args,
                     stdIn: lessStream,
