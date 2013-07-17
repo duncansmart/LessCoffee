@@ -1,6 +1,14 @@
 @echo off
 pushd "%~dp0\nodejs"
 
+if not exist node_modules\coffee-script (
+    npm install coffee-script
+)
+
+if not exist node_modules\less (
+    npm install less
+)
+
 set zip="%ProgramFiles%\7-Zip\7z.exe"
 if not exist %zip% (
   echo ERROR: Please install the 32-bit version of 7-zip
