@@ -50,3 +50,5 @@ src/Handlers/nodejs/node_modules/less/*
 src/Handlers/nodejs/node_modules/coffee-script/*
 
 /package/*.nupkg
+
+/src/Handlers/Resources/nodejs.tgz
