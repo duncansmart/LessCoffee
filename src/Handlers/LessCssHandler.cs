@@ -96,25 +96,25 @@ namespace DotSmart
             using (lessStream)
             using (var errors = new StringWriter())
             {
-                string dirname = Path.GetDirectoryName(lessFilePath);
-                if (dirname.Contains(' '))
-                    throw new ApplicationException("lessc doesn't support file paths with spaces '" + dirname + "'");
-
                 /*
                     usage: lessc [option option=parameter ...] <source> [destination]
 
                     If source is set to `-' (dash or hyphen-minus), input is read from stdin.
 
-                    options:
+                    	options:
                         -h, --help              Print help (this message) and exit.
-                        --include-path          Set include paths. Separated by `:'. Use `;' on Windows.
+                        --include-path=PATHS    Set include paths. Separated by `:'. Use `;' on Windows.
+                        -M, --depends           Output a makefile import dependency list to stdout
                         --no-color              Disable colorized output.
+                        --no-ie-compat          Disable IE compatibility checks.
+                        -l, --lint              Syntax check only (lint).
                         -s, --silent            Suppress output of error messages.
                         --strict-imports        Force evaluation of imports.
                         --verbose               Be verbose.
                         -v, --version           Print version number and exit.
                         -x, --compress          Compress output by removing some whitespaces.
                         --yui-compress          Compress output using ycssmin
+                        --max-line-len=LINELEN  Max line length used by ycssmin
                         -O0, -O1, -O2           Set the parser's optimization level. The lower
                                                 the number, the less nodes it will create in the
                                                 tree. This could matter for debugging, or if you
@@ -125,22 +125,27 @@ namespace DotSmart
                                                 that will output the information within a fake
                                                 media query which is compatible with the SASS
                                                 format, and 'all' which will do both.
-                        -rp, --rootpath         Set rootpath for url rewriting in relative imports and urls.
-                                                Works with or withour the relative-urls option.
+                        -rp, --rootpath=URL     Set rootpath for url rewriting in relative imports and urls.
+                                                Works with or without the relative-urls option.
                         -ru, --relative-urls    re-write relative urls to the base less file.
+                        -sm=on|off              Turn on or off strict math, where in strict mode, math
+                        --strict-math=on|off    requires brackets. This option may default to on and then
+                                                be removed in the future.
+                        -su=on|off              Allow mixed units, e.g. 1px+1em or 1px*1px which have units
+                    --strict-units=on|off   that cannot be represented.
                  */
 
                 string args = "\"" + _lessc + "\""
                     + " -" // read from stdin
                     + (compress ? " --yui-compress" : "")
-                    + " --include-path=" + dirname
                     + " --no-color"
                     + (lineNumbers != null ? " --line-numbers=" + lineNumbers : "");
                 int exitCode = ProcessUtil.Exec(NodeExe,
                     args: args,
                     stdIn: lessStream,
                     stdOut: output,
-                    stdErr: errors);
+                    stdErr: errors, 
+                    workingDirectory: Path.GetDirectoryName(lessFilePath));
                 if (exitCode != 0)
                 {
                     throw new ApplicationException(string.Format("Error {0} in '{1}': \r\n{2}",
