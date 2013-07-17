@@ -1,3 +1,0 @@
-[submodule "src/Handlers/nodejs/node_modules/less"]
-	path = src/Handlers/nodejs/node_modules/less
-	url = https://github.com/cloudhead/less.js.git
