@@ -9,11 +9,7 @@ if not exist node_modules\less (
     npm install less
 )
 
-set zip="%ProgramFiles%\7-Zip\7z.exe"
-if not exist %zip% (
-  echo ERROR: Please install the 32-bit version of 7-zip
-  exit /b 1
-)
+set zip="%~dp0..\..\tools\7-zip\7z.exe"
 
 if exist %temp%\nodejs.tar del %temp%\nodejs.tar
 if exist ..\Resources\nodejs.tgz del ..\Resources\nodejs.tgz
