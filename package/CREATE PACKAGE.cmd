@@ -6,7 +6,7 @@ pushd "%~dp0"
 ::echo BUILDVER='%BUILDVER%'
 ::set /a BUILDVER=0
 
-nuget pack LessCoffee.nuspec -version 2.4.0.2
+nuget pack LessCoffee.nuspec -version 2.5.0.0
 ::if %ERRORLEVEL% == 0 (
 ::    echo %BUILDVER% > buildver.txt
 ::)
