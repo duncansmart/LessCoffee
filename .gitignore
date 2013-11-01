@@ -45,10 +45,7 @@ _ReSharper*/
 ~$*
 
 src/packages/*
-src/Handlers/nodejs/node_modules/npm/
-src/Handlers/nodejs/node_modules/less/*
-src/Handlers/nodejs/node_modules/coffee-script/*
-src/Handlers/nodejs/node_modules/.bin/*
+src/Handlers/nodejs/*
 
 /package/*.nupkg
 

@@ -116,24 +116,20 @@
     <None Include="Content\less\variables.less" />
     <None Include="Content\less\wells.less" />
     <None Include="packages.config" />
+    <None Include="pre-build.cmd" />
     <None Include="Resources\nodejs.tgz" />
-    <None Include="tar-node.cmd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>$(ProjectDir)\pre-build.cmd</PreBuildEvent>
-  </PropertyGroup>
   <Import Project="..\packages\AjaxMin.4.96.4941.15389\build\net35\AjaxMin.targets" Condition="Exists('..\packages\AjaxMin.4.96.4941.15389\build\net35\AjaxMin.targets')" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
+    <Exec Command="$(ProjectDir)\pre-build.cmd"  />
   </Target>
-  <Target Name="AfterBuild">
+  <Target Name="BeforeClean">
+    <Exec Command="$(ProjectDir)\pre-build.cmd CLEAN" />
   </Target>
-  -->
 </Project>
