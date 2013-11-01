@@ -68,16 +68,16 @@ h1 {
             // override a variable name
             LessCssHandler.GetPostscript += (filename) => "@logoColor: #f00;";
 
-            Assert.AreEqual("h1{color:#f00}", compile(less));
+            Assert.AreEqual("h1{color:red}", compile(less));
         }
 
         [Test]
         public void CompileBootstrap()
         {
             var output = new StringWriter();
-            LessCssHandler.RenderCss(@"..\Content\less\bootstrap.less", output);
+            LessCssHandler.RenderCss(@"..\..\packages\Twitter.Bootstrap.Less.3.0.1\content\Content\bootstrap\bootstrap.less", output);
 
-            Assert.AreEqual(98200, output.ToString().Length);
+            Assert.AreEqual(102182, output.ToString().Length);
         }
 
 
