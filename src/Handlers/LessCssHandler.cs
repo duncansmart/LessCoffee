@@ -137,7 +137,7 @@ namespace DotSmart
 
                 string args = "\"" + _lessc + "\""
                     + " -" // read from stdin
-                    + (compress ? " --yui-compress" : "")
+                    + (compress ? " --clean-css" : "")
                     + " --no-color"
                     + (lineNumbers != null ? " --line-numbers=" + lineNumbers : "");
                 int exitCode = ProcessUtil.Exec(NodeExe,
