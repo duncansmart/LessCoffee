@@ -42,10 +42,15 @@ if not exist ..\Resources\nodejs.tgz (
     if exist %temp%\nodejs.tar del %temp%\nodejs.tar
 
     %zip% a -r %temp%\nodejs.tar * ^
-        -xr!node_modules\npm\ ^
-        -xr!node_modules\less\test\ ^
-        -xr!node_modules\less\benchmark\ ^
-        -xr!node_modules\less\dist\ ^
+        -x!node_modules\npm\ ^
+        -x!node_modules\less\.grunt\ ^
+        -x!node_modules\less\.idea\ ^
+        -x!node_modules\less\benchmark\ ^
+        -x!node_modules\less\build\ ^
+        -x!node_modules\less\dist\ ^
+        -x!node_modules\less\projectFilesBackup\ ^
+        -x!node_modules\less\test\ ^
+        -x!node_modules\less\tmp\ ^
         >nul
         
     %zip% a ..\Resources\nodejs.tgz %temp%\nodejs.tar >nul
