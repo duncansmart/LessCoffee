@@ -78,6 +78,11 @@
     <None Include="packages.config" />
     <None Include="pre-build.cmd" />
     <None Include="Resources\nodejs.tgz" />
+    <None Include="Tests\data-uri.less" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Tests\images\lesscoffee-logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\AjaxMin.4.96.4941.15389\build\net35\AjaxMin.targets" Condition="Exists('..\packages\AjaxMin.4.96.4941.15389\build\net35\AjaxMin.targets')" />

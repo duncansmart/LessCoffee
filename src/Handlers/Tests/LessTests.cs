@@ -80,6 +80,11 @@ h1 {
             Assert.AreEqual(102182, output.ToString().Length);
         }
 
+        [Test]
+        public void data_uri_test()
+        {
+            LessCssHandler.RenderCss(@"..\Tests\data-uri.less", TextWriter.Null);
+        }
 
         string compile(string lessSource)
         {

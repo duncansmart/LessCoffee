@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LessCoffee", "Handlers\LessCoffee.csproj", "{BD8EB86A-59B3-4240-8C92-FFABF52DC027}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LessCoffee.TestWeb", "TestWeb\LessCoffee.TestWeb.csproj", "{54F17456-95C8-403F-B361-9A4251FDC325}"
@@ -15,6 +17,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "package", "package", "{C7B43AF5-A8DB-4E1E-A469-6B32ADD02C62}"
 	ProjectSection(SolutionItems) = preProject
 		..\package\LessCoffee.nuspec = ..\package\LessCoffee.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D8A52370-349E-4864-8E88-6206273EDC11}"
+	ProjectSection(SolutionItems) = preProject
+		WE2013-settings.xml = WE2013-settings.xml
 	EndProjectSection
 EndProject
 Global
