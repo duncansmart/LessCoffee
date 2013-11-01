@@ -125,7 +125,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>$(ProjectDir)\tar-node.cmd</PreBuildEvent>
+    <PreBuildEvent>$(ProjectDir)\pre-build.cmd</PreBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\AjaxMin.4.96.4941.15389\build\net35\AjaxMin.targets" Condition="Exists('..\packages\AjaxMin.4.96.4941.15389\build\net35\AjaxMin.targets')" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
