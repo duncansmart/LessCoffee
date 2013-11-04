@@ -101,38 +101,47 @@ namespace DotSmart
 
                     If source is set to `-' (dash or hyphen-minus), input is read from stdin.
 
-                    	options:
-                        -h, --help              Print help (this message) and exit.
-                        --include-path=PATHS    Set include paths. Separated by `:'. Use `;' on Windows.
-                        -M, --depends           Output a makefile import dependency list to stdout
-                        --no-color              Disable colorized output.
-                        --no-ie-compat          Disable IE compatibility checks.
-                        -l, --lint              Syntax check only (lint).
-                        -s, --silent            Suppress output of error messages.
-                        --strict-imports        Force evaluation of imports.
-                        --verbose               Be verbose.
-                        -v, --version           Print version number and exit.
-                        -x, --compress          Compress output by removing some whitespaces.
-                        --yui-compress          Compress output using ycssmin
-                        --max-line-len=LINELEN  Max line length used by ycssmin
-                        -O0, -O1, -O2           Set the parser's optimization level. The lower
-                                                the number, the less nodes it will create in the
-                                                tree. This could matter for debugging, or if you
-                                                want to access the individual nodes in the tree.
-                        --line-numbers=TYPE     Outputs filename and line numbers.
-                                                TYPE can be either 'comments', which will output
-                                                the debug info within comments, 'mediaquery'
-                                                that will output the information within a fake
-                                                media query which is compatible with the SASS
-                                                format, and 'all' which will do both.
-                        -rp, --rootpath=URL     Set rootpath for url rewriting in relative imports and urls.
-                                                Works with or without the relative-urls option.
-                        -ru, --relative-urls    re-write relative urls to the base less file.
-                        -sm=on|off              Turn on or off strict math, where in strict mode, math
-                        --strict-math=on|off    requires brackets. This option may default to on and then
-                                                be removed in the future.
-                        -su=on|off              Allow mixed units, e.g. 1px+1em or 1px*1px which have units
-                    --strict-units=on|off   that cannot be represented.
+                    options:
+                      -h, --help               Print help (this message) and exit.
+                      --include-path=PATHS     Set include paths. Separated by `:'. Use `;' on Windows.
+                      -M, --depends            Output a makefile import dependency list to stdout
+                      --no-color               Disable colorized output.
+                      --no-ie-compat           Disable IE compatibility checks.
+                      --no-js                  Disable JavaScript in less files
+                      -l, --lint               Syntax check only (lint).
+                      -s, --silent             Suppress output of error messages.
+                      --strict-imports         Force evaluation of imports.
+                      --insecure               Allow imports from insecure https hosts.
+                      -v, --version            Print version number and exit.
+                      -x, --compress           Compress output by removing some whitespaces.
+                      --clean-css              Compress output using clean-css
+                      --source-map[=FILENAME]  Outputs a v3 sourcemap to the filename (or output filename.map)
+                      --source-map-rootpath=X  adds this path onto the sourcemap filename and less file paths
+                      --source-map-basepath=X  Sets sourcemap base path, defaults to current working directory.
+                      --source-map-less-inline puts the less files into the map instead of referencing them
+                      --source-map-map-inline  puts the map (and any less files) into the output css file
+                      -rp, --rootpath=URL      Set rootpath for url rewriting in relative imports and urls.
+                                               Works with or without the relative-urls option.
+                      -ru, --relative-urls     re-write relative urls to the base less file.
+                      -sm=on|off               Turn on or off strict math, where in strict mode, math
+                      --strict-math=on|off     requires brackets. This option may default to on and then
+                                               be removed in the future.
+                      -su=on|off               Allow mixed units, e.g. 1px+1em or 1px*1px which have units
+                      --strict-units=on|off    that cannot be represented.
+
+                    -------------------------- Deprecated ----------------
+                      -O0, -O1, -O2            Set the parser's optimization level. The lower
+                                               the number, the less nodes it will create in the
+                                               tree. This could matter for debugging, or if you
+                                               want to access the individual nodes in the tree.
+                      --line-numbers=TYPE      Outputs filename and line numbers.
+                                               TYPE can be either 'comments', which will output
+                                               the debug info within comments, 'mediaquery'
+                                               that will output the information within a fake
+                                               media query which is compatible with the SASS
+                                               format, and 'all' which will do both.
+                      --verbose                Be verbose.
+
                  */
 
                 string args = "\"" + _lessc + "\""
