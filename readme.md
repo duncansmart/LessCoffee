@@ -10,7 +10,7 @@ LESS has its own native bundling built-in using `@import`. In addition, this all
 
 **~/Content/main.less**:
 
-```less
+```css
 @import "bootstrap.less";
 @import "mybrand.less";       // defines default @brand-color1 and @brand-color2
 @import (less) "chosen.css";  // note how we can transclude CSS
