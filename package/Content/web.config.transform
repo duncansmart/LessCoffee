@@ -3,9 +3,9 @@
 
   <system.web>
     <httpHandlers>
-      <add path="*.coffee" type="DotSmart.CoffeeScriptHandler, LessCoffee" verb="*" validate="false"/>
-      <add path="*.less" type="DotSmart.LessCssHandler, LessCoffee" verb="*" validate="false"/>
-      <add path="*.less.css" type="DotSmart.LessCssHandler, LessCoffee" verb="*" validate="false"/>
+      <add path="*.coffee" type="DotSmart.CoffeeScriptHandler, LessCoffee" verb="GET,HEAD" validate="false"/>
+      <add path="*.less" type="DotSmart.LessCssHandler, LessCoffee" verb="GET,HEAD" validate="false"/>
+      <add path="*.less.css" type="DotSmart.LessCssHandler, LessCoffee" verb="GET,HEAD" validate="false"/>
     </httpHandlers>
     
     <caching>
@@ -23,9 +23,9 @@
   <system.webServer>
     <validation validateIntegratedModeConfiguration="false"/>
     <handlers>
-      <add path="*.coffee" type="DotSmart.CoffeeScriptHandler, LessCoffee" verb="*" name="DotSmart.CoffeeScriptHandler"/>
-      <add path="*.less" type="DotSmart.LessCssHandler, LessCoffee" verb="*" name="DotSmart.LessCssHandler"/>
-      <add path="*.less.css" type="DotSmart.LessCssHandler, LessCoffee" verb="*" name="DotSmart.LessCssHandler2"/>
+      <add path="*.coffee" type="DotSmart.CoffeeScriptHandler, LessCoffee" verb="GET,HEAD" name="DotSmart.CoffeeScriptHandler"/>
+      <add path="*.less" type="DotSmart.LessCssHandler, LessCoffee" verb="GET,HEAD" name="DotSmart.LessCssHandler"/>
+      <add path="*.less.css" type="DotSmart.LessCssHandler, LessCoffee" verb="GET,HEAD" name="DotSmart.LessCssHandler2"/>
     </handlers>
   </system.webServer>
 
