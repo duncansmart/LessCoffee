@@ -4,9 +4,55 @@ HTTP handlers for ASP.NET web sites that transform *.less and *.coffee files int
 
 As of version 2.0 the project uses an embedded version of nodejs (embedded as a resource and extracted at runtime) to run the latest versions of the LESS and CoffeeScript (previously it used [less.js-windows](https://github.com/duncansmart/less.js-windows) and [coffeescript-windows](https://github.com/duncansmart/coffeescript-windows)).
 
+## Bundling
+
+LESS has its own native bundling built-in using `@import`. In addition, this allows you to override the included files variables, which is very powerful, e.g.:
+
+~/Content/main.less:
+
+    @import "bootstrap.less";
+    @import "mybrand.less"; // defines default @brand-color1 and @brand-color2
+    @import (less) "chosen.css"; // note how we can transclude CSS
+
+    // override brand colors from mybrand.less
+    @brand-color1: #f00;
+    @brand-color2: #baa;
+
+    // also override Bootstrap ones
+    @linkColor: #0064cd;
+    @headingsFontWeight: normal;
+    @navbarText: #555;
+
+~/Views/_Layout.cshtml:
+
+    <link rel="stylesheet" href="~/Content/main.less" />
+
+## Minification
+
+Minification is enabled/disabled by the `system.web/compilation/@debug` attribute in your `Web.config` file. If `debug=true` then no minification is done, otherwise the output is minified.
+
+### Microsoft ASP.NET Web Optimization 
+
+LessCoffee doesn't *currently* support the ASP.NET bundling and minification framework because I find using `@imports` more effective for LESS files at least. `LessCssHandler` does expose a `RenderCss` method that could be adapted if you fancy submitting a pull-request!
+
+## Caching
+
+Control the cachebility of the output using the `LessCoffee` cache profile, e.g.
+
+    <system.web>
+        <caching>
+            <outputCacheSettings>
+                <outputCacheProfiles>
+                    <!-- 1 year = 31536000 secs -->
+                    <add name="LessCoffee" duration="31536000" location="Any" varyByParam="*" />
+                </outputCacheProfiles>
+        </outputCacheSettings>
+        </caching>
+    </system.web>
+
 ## Install
 
-If you're running Visual Studio 2010 then simply use the [LessCoffee NuGet package](http://nuget.org/List/Packages/LessCoffee).
+If you're running Visual Studio 2010 or later then simply use the [LessCoffee NuGet package](http://nuget.org/List/Packages/LessCoffee).
 
     PM> Install-Package LessCoffee
 
