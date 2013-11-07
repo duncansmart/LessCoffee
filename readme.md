@@ -18,8 +18,8 @@ If you're using Visual Studio 2008 you'll need follow these manual steps:
 ```
     <system.web>
         <httpHandlers>
-            <add path="*.coffee" type="DotSmart.CoffeeScriptHandler, LessCoffee" verb="*" validate="false"/>
-            <add path="*.less" type="DotSmart.LessCssHandler, LessCoffee" verb="*" validate="false"/>
+            <add path="*.coffee" type="DotSmart.CoffeeScriptHandler, LessCoffee" verb="GET,HEAD" validate="false"/>
+            <add path="*.less" type="DotSmart.LessCssHandler, LessCoffee" verb="GET,HEAD" validate="false"/>
         </httpHandlers>
     </system.web>
 
@@ -27,8 +27,8 @@ If you're using Visual Studio 2008 you'll need follow these manual steps:
     <system.webServer>
         <validation validateIntegratedModeConfiguration="false"/>
         <handlers>
-            <add path="*.coffee" type="DotSmart.CoffeeScriptHandler, LessCoffee" verb="*" name="DotSmart.CoffeeScriptHandler"/>
-            <add path="*.less" type="DotSmart.LessCssHandler, LessCoffee" verb="*" name="DotSmart.LessCssHandler"/>
+            <add path="*.coffee" type="DotSmart.CoffeeScriptHandler, LessCoffee" verb="GET,HEAD" name="DotSmart.CoffeeScriptHandler"/>
+            <add path="*.less" type="DotSmart.LessCssHandler, LessCoffee" verb="GET,HEAD" name="DotSmart.LessCssHandler"/>
         </handlers>
     </system.webServer>
 ```
