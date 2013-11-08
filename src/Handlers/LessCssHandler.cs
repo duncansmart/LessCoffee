@@ -35,23 +35,7 @@ namespace DotSmart
 
         protected override IEnumerable<string> GetFileDependencies(string physicalFileName)
         {
-            // look for "@import" and add those to dependencies also
-            return parseImports(physicalFileName);
-        }
-
-        static IEnumerable<string> parseImports(string lessFileName)
-        {
-            string dir = Path.GetDirectoryName(lessFileName);
-
-            var importRegex = new Regex(@"@import\s+[""'](.*)[""'];");
-
-            return (from line in File.ReadAllLines(lessFileName)
-                    let match = importRegex.Match(line)
-                    let file = match.Groups[1].Value
-                    where match.Success
-                      && !file.EndsWith(".css", StringComparison.OrdinalIgnoreCase)
-                    select Path.Combine(dir, Path.ChangeExtension(file, ".less"))
-            );
+            return GetDependencies(physicalFileName);
         }
 
         internal static bool renderStylesheet(string lessFilePath, TextWriter output)
@@ -170,7 +154,7 @@ namespace DotSmart
         /// <summary>
         /// Returns an array of file names representing all of the dependencies of the specified *.less file (not including itself).
         /// </summary>
-        public static string[] Depends(string lessFilePath)
+        public static string[] GetDependencies(string lessFilePath)
         {
             lessFilePath = Path.GetFullPath(lessFilePath);
 
@@ -222,8 +206,6 @@ parser.parse(data, function (err, tree) {
                 }
                 return output.ToString().Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             }
-
-
         }
     }
 }
