@@ -152,6 +152,16 @@ namespace DotSmart
         }
 
         /// <summary>
+        /// Gets the most recent modified date of the specified *.less file and all of its dependecies
+        /// </summary>
+        public static DateTime GetLastModified(string lessFilePath)
+        {
+            var files = GetDependencies(lessFilePath).Concat(new[] { lessFilePath });
+            var dates = from f in files select File.GetLastWriteTimeUtc(f);
+            return dates.Max();
+        }
+
+        /// <summary>
         /// Returns an array of file names representing all of the dependencies of the specified *.less file (not including itself).
         /// </summary>
         public static string[] GetDependencies(string lessFilePath)

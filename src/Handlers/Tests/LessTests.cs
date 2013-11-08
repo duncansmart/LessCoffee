@@ -77,21 +77,46 @@ h1 {
             var output = new StringWriter();
             LessCssHandler.RenderCss(@"..\..\packages\Twitter.Bootstrap.Less.3.0.1\content\Content\bootstrap\bootstrap.less", output);
 
+            // yeah a bit lame :-)
             Assert.AreEqual(102182, output.ToString().Length);
         }
 
         [Test]
         public void data_uri_test()
         {
-            LessCssHandler.RenderCss(@"..\Tests\data-uri.less", TextWriter.Null);
+            Assert.DoesNotThrow(() =>
+            {
+                LessCssHandler.RenderCss(@"..\Tests\data-uri.less", TextWriter.Null);
+            });
         }
 
         [Test]
         public void DependsTest()
         {
-            string lessfile = @"..\..\packages\Twitter.Bootstrap.Less.3.0.1\content\Content\bootstrap\bootstrap.less";
-            var deps = LessCssHandler.Depends(lessfile);
-            Assert.AreEqual(38, deps.Length);
+            writeFile("dep-main.less", "@import 'deptest-1';");
+            writeFile("deptest-1.less", "@import 'deptest/2';");
+            writeFile("./deptest/2.less", "foo {bar:baz}");
+
+            var dependencies = LessCssHandler.GetDependencies(Path.Combine(_testDir, "dep-main.less"));
+            var relativePaths = dependencies.Select(f => f.Substring(_testDir.Length + 1));
+
+            Assert.AreEqual(new[] { @"deptest-1.less", @"deptest\2.less" }, relativePaths);
+        }
+
+        [Test]
+        public void LastModifiedTest()
+        {
+            var date1 = new DateTime(2012, 1, 1);
+            var date2 = new DateTime(2013, 1, 1);
+            var date3 = new DateTime(2014, 1, 1);
+
+            writeFile("lm-main.less", "@import 'lm-dep1';", date1);
+            writeFile("lm-dep1.less", "@import 'lm-dep2';", date2);
+            writeFile("lm-dep2.less", "foo {bar:baz}", date3);
+
+            var lmdate = LessCssHandler.GetLastModified(Path.Combine(_testDir, "lm-main.less"));
+
+            Assert.AreEqual(date3, lmdate);
         }
 
         string compile(string lessSource)
@@ -105,10 +130,15 @@ h1 {
             return outputCss;
         }
 
-        string writeFile(string name, string text)
+        string writeFile(string name, string text, DateTime? lastWriteTime = null)
         {
-            string lessFile = Path.Combine(_testDir, name);
+            string lessFile = Path.GetFullPath(Path.Combine(_testDir, name));
+            Directory.CreateDirectory(Path.GetDirectoryName(lessFile));
             File.WriteAllText(lessFile, text);
+
+            if (lastWriteTime != null)
+                File.SetLastWriteTime(lessFile, lastWriteTime.Value);
+
             return lessFile;
         }
     }
