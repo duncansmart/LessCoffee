@@ -96,6 +96,7 @@ namespace DotSmart
             using (lessStream)
             using (var errors = new StringWriter())
             {
+                #region lessc usage
                 /*
                     usage: lessc [option option=parameter ...] <source> [destination]
 
@@ -143,6 +144,7 @@ namespace DotSmart
                       --verbose                Be verbose.
 
                  */
+                #endregion
 
                 string args = "\"" + _lessc + "\""
                     + " -" // read from stdin
@@ -165,5 +167,63 @@ namespace DotSmart
             }
         }
 
+        /// <summary>
+        /// Returns an array of file names representing all of the dependencies of the specified *.less file (not including itself).
+        /// </summary>
+        public static string[] Depends(string lessFilePath)
+        {
+            lessFilePath = Path.GetFullPath(lessFilePath);
+
+            using (var output = new StringWriter())
+            using (var errors = new StringWriter())
+            {
+                // We would use 'lessc --depends' but it returns a space-delimited list of filenames 
+                // which will be problematic to parse if there are spaces in your filenames...
+                var dependsJS = @"
+var sys = require('util'),
+    fs = require('fs'),
+    path = require('path'),
+    lessfile = process.argv[1],
+    data = fs.readFileSync(lessfile).toString(),
+    less = require('./node_modules/less/lib/less');
+
+process.chdir(path.dirname(lessfile));
+
+var parser = new less.Parser();
+parser.parse(data, function (err, tree) {
+    if (err) {
+        less.writeError(err);
+        return 1;
+    }
+    else {
+        for (var file in parser.imports.files) {
+            sys.puts(path.resolve(file));
+        }
+        return 0;
+    }
+});";
+                string args = "--eval \"" + dependsJS + "\" \"" + lessFilePath + "\"";
+                int exitCode = ProcessUtil.Exec(NodeExe,
+                    args: args,
+                    stdIn: null,
+                    stdOut: output,
+                    stdErr: errors,
+                    workingDirectory: Path.GetDirectoryName(NodeExe)
+                );
+                if (exitCode != 0)
+                {
+                    string errorText = errors.ToString().Trim();
+                    if (string.IsNullOrEmpty(errorText))
+                        errorText = output.ToString().Trim();
+                    throw new ApplicationException(string.Format("Error {0} in '{1}': \r\n{2}",
+                                                    exitCode,
+                                                    lessFilePath,
+                                                    errorText));
+                }
+                return output.ToString().Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            }
+
+
+        }
     }
 }

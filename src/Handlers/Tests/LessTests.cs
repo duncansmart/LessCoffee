@@ -86,6 +86,14 @@ h1 {
             LessCssHandler.RenderCss(@"..\Tests\data-uri.less", TextWriter.Null);
         }
 
+        [Test]
+        public void DependsTest()
+        {
+            string lessfile = @"..\..\packages\Twitter.Bootstrap.Less.3.0.1\content\Content\bootstrap\bootstrap.less";
+            var deps = LessCssHandler.Depends(lessfile);
+            Assert.AreEqual(38, deps.Length);
+        }
+
         string compile(string lessSource)
         {
             string filename = writeFile(Path.GetRandomFileName() + ".less", lessSource);
