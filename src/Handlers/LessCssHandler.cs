@@ -202,7 +202,7 @@ parser.parse(data, function (err, tree) {
                     stdIn: null,
                     stdOut: output,
                     stdErr: errors,
-                    workingDirectory: Path.GetDirectoryName(NodeExe)
+                    workingDirectory: TempDirectory
                 );
                 if (exitCode != 0)
                 {

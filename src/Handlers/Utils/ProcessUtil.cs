@@ -7,7 +7,7 @@ namespace DotSmart
 {
     class ProcessUtil
     {
-        public static int Exec(string filename, string args, TextReader stdIn, TextWriter stdOut, TextWriter stdErr, Encoding encoding = null, string workingDirectory = null)
+        public static int Exec(string filename, string args, TextReader stdIn = null, TextWriter stdOut = null, TextWriter stdErr = null, Encoding encoding = null, string workingDirectory = null)
         {
             using (Process process = new Process())
             {

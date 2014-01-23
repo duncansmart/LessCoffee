@@ -23,7 +23,11 @@ namespace DotSmart
         static ScriptHandlerBase()
         {
             extractNodeJs();
-            NodeExe = Path.Combine(TempDirectory, @"node.exe");
+            NodeExe = Path.Combine(TempDirectory, "node.exe");
+
+            // Use installed version of node if found on PATH
+            if (ProcessUtil.Exec("node.exe", "--version") == 0)
+                NodeExe = "node.exe";
         }
 
         protected abstract void Render(string physicalFileName, TextWriter output);
