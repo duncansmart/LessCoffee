@@ -68,16 +68,6 @@ namespace DotSmart
 
         public static void RenderCss(string lessFilePath, TextWriter output, bool compress = true, string lessPrologue = null, string lessPostscript = null, string lineNumbers = null)
         {
-            TextReader lessStream;
-
-            string lessSrc = File.ReadAllText(lessFilePath);
-            lessStream = new StringReader(
-                lessPrologue
-                + lessSrc
-                + lessPostscript
-                );
-
-            using (lessStream)
             using (var errors = new StringWriter())
             {
                 #region lessc usage
@@ -130,16 +120,32 @@ namespace DotSmart
                  */
                 #endregion
 
-                string args = "\"" + _lessc + "\""
-                    + " -" // read from stdin
-                    + (compress ? " --clean-css" : "")
+                string args = "\"" + _lessc + "\"";
+
+                TextReader stdin = null;
+                if (!string.IsNullOrEmpty(lessPrologue) || !string.IsNullOrEmpty(lessPostscript))
+                {
+                    stdin = new StringReader(
+                        lessPrologue
+                        + File.ReadAllText(lessFilePath)
+                        + lessPostscript
+                        );
+                    args = " -" + args; // read from stdin  -- NOTE: THIS DOESN'T SEEM TO WORK ON AZURE?!?
+                }
+                else
+                {
+                    args += " \"" + lessFilePath + "\"";
+                }
+
+                args += (compress ? " --clean-css" : "")
                     + " --no-color"
                     + (lineNumbers != null ? " --line-numbers=" + lineNumbers : "");
+
                 int exitCode = ProcessUtil.Exec(NodeExe,
                     args: args,
-                    stdIn: lessStream,
+                    stdIn: stdin,
                     stdOut: output,
-                    stdErr: errors, 
+                    stdErr: errors,
                     workingDirectory: Path.GetDirectoryName(lessFilePath));
                 if (exitCode != 0)
                 {
