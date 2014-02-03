@@ -26,7 +26,7 @@ namespace DotSmart
             NodeExe = Path.Combine(TempDirectory, "node.exe");
 
             // Use installed version of node if found on PATH
-            if (ProcessUtil.Exec("node.exe", "--version") == 0)
+            if (ProcessUtil.Exec("cmd.exe", "/c where node.exe") == 0)
                 NodeExe = "node.exe";
         }
 
