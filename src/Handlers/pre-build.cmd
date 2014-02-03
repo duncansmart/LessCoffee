@@ -22,19 +22,13 @@ if not exist node.exe (
 if not exist npm.cmd (
     echo Downloading npm ...
     if exist npm.zip del npm.zip
-    cscript //nologo %HTTPGET_JS% http://nodejs.org/dist/npm/npm-1.3.9.zip npm.zip
+    cscript //nologo %HTTPGET_JS% http://nodejs.org/dist/npm/npm-1.3.26.zip npm.zip
     echo Extracting npm ...
     %zip% x npm.zip >nul
     del npm.zip
 )
 
-if not exist node_modules\coffee-script (
-    call npm install coffee-script --quiet
-)
-
-if not exist node_modules\less (
-    call npm install less --quiet
-)
+call npm update --quiet
 
 if not exist ..\Resources\nodejs.tgz (
     if not exist ..\Resources md ..\Resources

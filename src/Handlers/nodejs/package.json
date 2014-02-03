@@ -1,0 +1,6 @@
+{  
+  "dependencies" : {  
+    "less" : ">=0.1",
+    "coffee-script" : ">=0.1"
+  }
+}
