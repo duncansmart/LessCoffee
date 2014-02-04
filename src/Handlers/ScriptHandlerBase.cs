@@ -14,7 +14,7 @@ namespace DotSmart
     public abstract class ScriptHandlerBase : IHttpHandler
     {
         private const string CACHE_PROFILE_NAME = "LessCoffee";
-        protected static DateTime CompileDate = File.GetLastWriteTime(typeof(CoffeeScriptHandler).Assembly.Location);
+        protected static DateTime CompileDate = File.GetLastWriteTime(typeof(ScriptHandlerBase).Assembly.Location);
 
         protected static string NodeExe;
 
@@ -47,7 +47,7 @@ namespace DotSmart
                     return _tempDirectory;
 
 
-                _tempDirectory = Path.Combine(Path.GetTempPath(), "LessCoffee" + (HttpRuntime.AppDomainAppId ?? "").Replace('/', '-'));
+                _tempDirectory = Path.Combine(Path.GetTempPath(), "LessCoffee" + (HttpRuntime.AppDomainAppId ?? "").Replace("LM/W3SVC/", "").Replace('/', '-') + "-" + CompileDate.ToString("yyMMddHH"));
                 if (!Directory.Exists(_tempDirectory))
                 {
                     try
